@@ -13,8 +13,10 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
   }
   $http.jsonp('http://www.reddit.com/r/music.json?limit=100&jsonp=JSON_CALLBACK&subreddit=jokes')
     .success(function(res) {
+      $scope.permalinks = []
       $scope.vids = res.data.children.reduce(function(prev,cur) {
         if (/^https?:\/\/(www\.)?youtube/.test(cur.data.url)) {
+          $scope.permalinks.push({title:cur.data.title,uri:cur.data.permalink})
           prev.push(getJsonFromUrl(cur.data.url.substr(30)).v)
           return prev
         } else {
@@ -49,7 +51,6 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
       if (player.getPlayerState()===0) {
         player.nextVideo()
       }
-      console.log(player.getPlayerState())
     }
     function stopVideo() {
       player.stopVideo();
