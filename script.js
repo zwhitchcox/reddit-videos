@@ -28,7 +28,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     player = new YT.Player('player', {
       height: '390',
       width: '640',
-      playerVars: { 'autoplay': 1, 'playlist':$scope.vids},
+      playerVars: { 'autoplay': 1},
       events: {
         'onReady': onPlayerReady,
         'onStateChange': onPlayerStateChange
@@ -37,6 +37,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
 
     // 4. The API will call this function when the video player is ready.
     function onPlayerReady(event) {
+      player.cuePlaylist($scope.vids)
       event.target.playVideo();
     }
 
