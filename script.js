@@ -47,7 +47,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
       if (!$scope.waiting) {
         if (player.getPlayerState()===0) {
           var the_url = getJsonFromUrl(player.getVideoUrl().substr(30)).v
-          player.nextVideo()
+          player.playVideo()
           $scope.waiting = true
           setTimeout(function(){$scope.waiting=false},3000)
         }
