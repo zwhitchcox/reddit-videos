@@ -48,13 +48,12 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
         if (player.getPlayerState()===0) {
           var the_url = getJsonFromUrl(player.getVideoUrl().substr(30)).v
           player.nextVideo()
+          console.log('next')
+          $scope.waiting = true
+          setTimeout(function(){$scope.waiting=false},3000)
         }
-        setTimeout(function(){$scope.waiting=true},3000)
-      }
 
-    }
-    function stopVideo() {
-      player.stopVideo();
+      }
     }
   }
 }]);
