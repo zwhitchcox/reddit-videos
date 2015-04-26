@@ -47,7 +47,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     var done = false;
     function onPlayerStateChange(event) {
       if (player.getPlayerState()===0) {
-        console.log('ended')
+        player.nextVideo()
       }
       console.log(player.getPlayerState())
     }
