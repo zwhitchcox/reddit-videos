@@ -42,17 +42,16 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
       player.cuePlaylist($scope.vids)
       event.target.playVideo();
     }
-
-    // 5. The API calls this function when the player's state changes.
-    //    The function indicates that when playing a video (state=1),
-    //    the player should play for six seconds and then stop.
-    var done = false;
+    $scope.waiting = false
     function onPlayerStateChange(event) {
-      if (player.getPlayerState()===0) {
-        var the_url = getJsonFromUrl(player.getVideoUrl().substr(30)).v
-        localStorage.setItem("firstTime", the_url)
-        player.nextVideo()
+      if (!$scope.waiting) {
+        if (player.getPlayerState()===0) {
+          var the_url = getJsonFromUrl(player.getVideoUrl().substr(30)).v
+          player.nextVideo()
+        }
+        setTimeout(function(){$scope.waiting=true},3000)
       }
+
     }
     function stopVideo() {
       player.stopVideo();
