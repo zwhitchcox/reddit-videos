@@ -16,8 +16,9 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
       $scope.permalinks = []
       $scope.vids = res.data.children.reduce(function(prev,cur) {
         if (/^https?:\/\/(www\.)?youtube/.test(cur.data.url)) {
-          $scope.permalinks.push({title:cur.data.title,uri:cur.data.permalink})
-          prev.push(getJsonFromUrl(cur.data.url.substr(30)).v)
+          var id = getJsonFromUrl(cur.data.url.substr(30)).v
+          $scope.permalinks[id] = {title:cur.data.title,uri:cur.data.permalink}
+          prev.push(id)
           return prev
         } else {
           return prev
@@ -51,7 +52,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     function addVidIdToStorage (id) {
       if (typeof(Storage) != "undefined") {
         if (localStorage.getItem("ids") === null) {
-          localStorage.setItem("ids", []);
+          localStorage.setItem("ids", '');
         } else {
           var ids = localStorage.getItem("ids")
           ids.push(id)
