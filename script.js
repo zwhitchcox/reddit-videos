@@ -17,7 +17,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
       $scope.vids = res.data.children.reduce(function(prev,cur) {
         if (/^https?:\/\/(www\.)?youtube/.test(cur.data.url)) {
           var id = getJsonFromUrl(cur.data.url.substr(30)).v
-          $scope.permalinks[id] = {title:cur.data.title,uri:cur.data.permalink}
+          $scope.permalinks.push({title:cur.data.title,uri:cur.data.permalink})
           prev.push(id)
           return prev
         } else {
