@@ -46,12 +46,23 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     function onPlayerStateChange(event) {
       if (!$scope.waiting) {
         if (player.getPlayerState()===0) {
-          var the_url = getJsonFromUrl(player.getVideoUrl().substr(30)).v
+          addVidIdToStorage(getJsonFromUrl(player.getVideoUrl().substr(30)).v)
           player.playVideo()
           $scope.waiting = true
           setTimeout(function(){player.playVideo()},3000)
         }
 
+      }
+    }
+    function addVidIdToStorage (id) {
+      if (typeof(Storage) != "undefined") {
+        if (localStorage.getItem("ids") === null) {
+          localStorage.setItem("ids", []);
+        } else {
+          var ids = localStorage.getItem("ids")
+          ids.push(id)
+          localStorage.setItem("ids", ids)
+        }
       }
     }
   }
