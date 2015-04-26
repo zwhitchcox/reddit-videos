@@ -30,7 +30,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     player = new YT.Player('player', {
       height: '390',
       width: '640',
-      playerVars: { 'autoplay': 1},
+      playerVars: { 'autoplay': 0},
       events: {
         'onReady': onPlayerReady,
         'onStateChange': onPlayerStateChange
@@ -46,7 +46,6 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     function onPlayerStateChange(event) {
       if (!$scope.waiting) {
         if (player.getPlayerState()===0) {
-          console.log('called')
           var the_url = getJsonFromUrl(player.getVideoUrl().substr(30)).v
           player.nextVideo()
           $scope.waiting = true
