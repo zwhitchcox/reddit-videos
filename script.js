@@ -28,6 +28,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     player = new YT.Player('player', {
       height: '390',
       width: '640',
+      playerVars: { 'autoplay': 1},
       events: {
         'onReady': onPlayerReady,
         'onStateChange': onPlayerStateChange
@@ -45,6 +46,10 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     //    the player should play for six seconds and then stop.
     var done = false;
     function onPlayerStateChange(event) {
+      if (event.data == YT.PlayerState.PLAYING && !done) {
+        setTimeout(stopVideo, 6000);
+        done = true;
+      }
     }
     function stopVideo() {
       player.stopVideo();
