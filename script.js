@@ -50,7 +50,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     function onPlayerStateChange(event) {
       if (player.getPlayerState()===0) {
         var the_url = getJsonFromUrl(player.getVideoUrl().substr(30)).v
-        console.log(the_url)
+        localStorage.setItem("firstTime", the_url)
         player.nextVideo()
       }
     }
