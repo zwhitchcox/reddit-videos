@@ -49,7 +49,7 @@
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand">Reddit Music</a>
+        <a class="navbar-brand">Reddit Videos</a>
       </div>
       <form class="navbar-form navbar-left" role="search">
       <div class="form-group">
@@ -57,6 +57,9 @@
       </div>
       <button ng-click="getVids(custsub)" class="btn btn-sm btn-default">Go</button>
       </form>
+      <ul class="nav navbar-nav navbar-left">
+      <li><a>Omit Already Played Videos: <input ng-model="omitRedundancies" type="checkbox" name="my-checkbox" checked></a></li>
+      </ul>
       <ul class="nav navbar-nav navbar-right">
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Other Apps<span class="caret"></span></a>

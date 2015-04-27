@@ -12,14 +12,16 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     return result;
   }
   $scope.getVids = function() {
-    $http.jsonp('http://www.reddit.com/r/'+$scope.custsub+'.json?limit=100&jsonp=JSON_CALLBACK&subreddit=jokes')
+    $http.jsonp('http://www.reddit.com/r/'+$scope.custsub+'.json?limit=100&jsonp=JSON_CALLBACK')
       .success(function(res) {
         $scope.permalinks = []
         $scope.vids = res.data.children.reduce(function(prev,cur) {
           if (/^https?:\/\/(www\.)?youtube/.test(cur.data.url)) {
             var id = getJsonFromUrl(cur.data.url.substr(30)).v
-            $scope.permalinks.push({title:cur.data.title,uri:cur.data.permalink})
-            prev.push(id)
+            if (!~JSON.parse(localStorage["ids"]).indexOf(id) || !$scope.omitRedundancies) {
+              $scope.permalinks.push({title:cur.data.title,uri:cur.data.permalink})
+              prev.push(id)
+            }
             return prev
           } else {
             return prev
@@ -29,8 +31,8 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
       })
   }
   $scope.custsub = 'videos'
+  $scope.$watch('omitRedundancies',$scope.getVids())
   $scope.getVids()
-
   $scope.play = function() {
     var player;
     player = new YT.Player('player', {
@@ -42,29 +44,39 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
         'onStateChange': onPlayerStateChange
       }
     })
-
-    // 4. The API will call this function when the video player is ready.
+    function playVid() {
+      player.playVideo()
+    }
     function onPlayerReady(event) {
       player.cuePlaylist($scope.vids)
-      event.target.playVideo();
+      playVid()
     }
     $scope.waiting = false
     function onPlayerStateChange(event) {
+      addVidIdToStorage(getJsonFromUrl(player.getVideoUrl().substr(30)).v)
       if (player.getPlayerState()===0) {
-        setTimeout(function(){player.playVideo()},3000)
+        setTimeout(function(){playVid()},3000)
       }
     }
     function addVidIdToStorage (id) {
-      if (typeof(Storage) != "undefined") {
-        if (localStorage.getItem("ids") === null) {
-          localStorage.setItem("ids", '');
-        } else {
-          var ids = localStorage.getItem("ids")
-          ids.push(id)
-          localStorage.setItem("ids", ids)
-        }
+      var ids;
+      if (localStorage['ids'] === null || localStorage['ids'] === undefined || localStorage['ids'] === "") {
+        ids = [];
+      } else {
+        ids = JSON.parse(localStorage["ids"]);
+      }
+      if (!~ids.indexOf(id)) {
+        ids.push(id)
+        localStorage["ids"] = JSON.stringify(ids);
       }
     }
+    $("[name='my-checkbox']").bootstrapSwitch({
+      size:'mini'
+    })
+    .on('switchChange.bootstrapSwitch', function(event, state) {
+      $scope.$apply($scope.getVids())
+      $scope.$apply($scope.omitRedundancies = state)
+    })
   }
 }]);
 })(window.angular);
