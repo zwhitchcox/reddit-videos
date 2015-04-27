@@ -11,6 +11,7 @@ app.controller('Ctrl', ['$scope','$resource','$http', function($scope,$resource,
     });
     return result;
   }
+  $scope.omitRedundancies = true
   $scope.getVids = function() {
     $http.jsonp('http://www.reddit.com/r/'+$scope.custsub+'.json?limit=100&jsonp=JSON_CALLBACK')
       .success(function(res) {
